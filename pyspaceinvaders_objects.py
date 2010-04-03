@@ -97,7 +97,7 @@ class Alien(Object):
 
     # Class vars:
     imageFlip = False
-    horzDir   = -1
+
 
     def __init__( self, game, fname, fname2 ):
         """ Pass filenames of 2 images that animation will alternate. """
@@ -150,3 +150,43 @@ class AlienMissile(Object):
 
     def Draw( self, surface ):
         surface.blit( self.image, self.rect )
+
+#-------------------------------------------------------------------------------
+# Mothership class.
+#-------------------------------------------------------------------------------
+
+class Mothership(Object):
+
+    # Class constants:
+    POINTS    = 100
+
+    # Class vars:
+    imageFlip = False
+    horzDir   = -1
+
+    def __init__( self, game):
+        """ Pass filenames of 2 images that animation will alternate. """
+        Object.__init__( self, game )
+        self.image    = pygame.image.load( "img/mothership.png"  ).convert()
+        self.image2   = pygame.image.load( "img/mothershipb.png" ).convert()
+        self.imageHit = pygame.image.load( "img/explosion.png" ).convert()
+        self.rect     = self.image.get_rect()
+        self.tick = self.game.tick + random.randint( 20, 25)
+        self.movement[0] = random.choice([-1,1])
+        
+    def SetAppearing( self ):
+        self.tick = self.tick + random.randint( 20, 25)
+        self.movement[0] = random.choice([-1,1])
+    
+    def Hit( self ):
+        self.hit = 7
+
+    def Draw( self, surface ):
+        if self.hit <= 0:
+            if Mothership.imageFlip:
+                surface.blit( self.image, self.rect )
+            else:
+                surface.blit( self.image2, self.rect )
+        else:
+            surface.blit( self.imageHit, self.rect )
+            

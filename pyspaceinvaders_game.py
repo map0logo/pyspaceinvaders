@@ -46,6 +46,7 @@ class Game:
         self.alienColumns   = [ ]
         self.playerMissiles = [ ]
         self.alienMissiles  = [ ]
+        self.mothership     = Mothership( self )
 
         # Initialize text-lines.
         self.gameTextPage = GameTextPage( self )
@@ -169,6 +170,10 @@ class Game:
         for missile in self.alienMissiles:
             if (missile.valid) and (missile.rect.centery < self.window.height):
                 missile.Draw( surface )
+                
+        # Draw mothership
+        if self.mothership.valid:
+            self.mothership.Draw( surface )
 
     def Animate( self ):
         """ Main animation function. """
@@ -183,6 +188,7 @@ class Game:
             alienList = self.AlienList()
             self.AnimatePlayer( alienList )
             self.AnimateAliens( alienList )
+            self.AnimateMothership ()
             PlayerAlienCollision( self.player, alienList )
 
     def AnimatePlayer( self, alienList ):
@@ -224,6 +230,13 @@ class Game:
                     self.score += Alien.POINTS
                     if self.cheat != 2:
                         missile.valid = False
+                        continue
+            # Has player's missile hit mothership
+            if Collided( missile, mothership ) and (mothership.valid) and (mothership.hit <= 0):
+                mothership.Hit()
+                self.score += Mothership.POINTS
+                if self.cheat != 2:
+                    missile.valid = False
             # Has this missile hit any opposite missile?
             MissileMissileCollision( missile, missileIdx, self.alienMissiles )
 
@@ -323,6 +336,32 @@ class Game:
             self.tempo += 12  # very quick when few aliens survive
 
         return (invaded,len(alienList))
+
+    def AnimateMothership( self ):
+        """ Animate mothership. """
+        # Animate exploding mothership (ok if not hit).
+        self.mothership.hit -= 1
+        
+        if self.tick >= self.mothership.tick:
+            self.mothership.valid = True
+
+        # Don't let player move while exploding.
+        if self.mothership.hit <= 0 and self.mothership.valid:
+            # Continue player movement until key released.
+            if self.mothership.movement != (0,0):
+                if  (self.mothership.rect.left  + self.mothership.movement[0] > 0) \
+                and (self.mothership.rect.right + self.mothership.movement[0] < self.window.width):
+                    self.player.rect.move_ip( self.mothership.movement[0], 0 )
+                    self.mothership.imageFlip = not self.mothership.imageFlip
+        
+        if (mothership.rect.left - padding < 0) \
+            or (mothership.rect.right + padding > self.window.width):
+            self.mothership.valid = False
+            # Initialize mothership appearing
+            self.mothership.SetAppearing()
+                
+
+
 
     def Run( self ):
         """ The main event loop. """
