@@ -7,6 +7,8 @@
 
 import sys, random
 import pygame
+from pygame.locals import K_1, K_ESCAPE, K_p, K_F5, K_F6, K_z, K_LEFT, K_x, \
+                          K_RIGHT, K_RCTRL, K_LCTRL, KEYUP, KEYDOWN
 from pyspaceinvaders_exception import *
 from pyspaceinvaders_lib import *
 from pyspaceinvaders_conf import *
@@ -374,28 +376,28 @@ class Game:
                 self.tick += 1
                 self.Animate()
                 self.Draw()
-            elif event.type == pygame.KEYDOWN:
+            elif event.type == KEYDOWN:
                 # Start game?
-                if event.key == pygame.K_1:
+                if event.key == K_1:
                     self.Reset( level=1 )
                     self.state = Game.STATE_PLAY
                     self.gameTextPage.ShowSplash( False )
                 # Quit?
-                elif event.key == pygame.K_ESCAPE:
+                elif event.key == K_ESCAPE:
                     sys.exit( 0 )
                 # Pause/help?
-                elif event.key == pygame.K_p:
+                elif event.key == K_p:
                     # If paused, keep help showing (don't toggle).
                     if self.state != Game.STATE_STOP:
                         self.gameTextPage.ToggleHelp()
                     self.TogglePause()
                 # Cheat?
-                elif event.key == pygame.K_F5:
+                elif event.key == K_F5:
                     self.cheat = 1
                     self.player.livesReset = 999
                     self.player.lives      = 999
                     self.player.salvo = 8
-                elif event.key == pygame.K_F6:
+                elif event.key == K_F6:
                     self.cheat = 2
                     self.player.livesReset = 999
                     self.player.lives      = 999
@@ -407,18 +409,18 @@ class Game:
                 #----ignore other keys if not playing----
     
                 # Move player left?
-                if (event.key == pygame.K_z) or (event.key == pygame.K_LEFT):
+                if (event.key == K_z) or (event.key == K_LEFT):
                     self.player.movement = ( -self.player.step, 0 )
                 # Move player right?
-                elif (event.key == pygame.K_x) or (event.key == pygame.K_RIGHT):
+                elif (event.key == K_x) or (event.key == K_RIGHT):
                     self.player.movement = ( self.player.step, 0 )
                 # Player fired gun?
-                elif (event.key == pygame.K_RCTRL) or (event.key == pygame.K_LCTRL):
+                elif (event.key == K_RCTRL) or (event.key == K_LCTRL):
                     self.player.fire = True
-            elif event.type == pygame.KEYUP:
+            elif event.type == KEYUP:
                 # Stop moving player?
-                if (event.key == pygame.K_z) or (event.key == pygame.K_x) or (event.key == pygame.K_LEFT) or (event.key == pygame.K_RIGHT):
+                if (event.key == K_z) or (event.key == K_x) or (event.key == K_LEFT) or (event.key == K_RIGHT):
                     self.player.movement = ( 0, 0 )
                 # Player stopped firing gun?
-                elif (event.key == pygame.K_RCTRL) or (event.key == pygame.K_LCTRL):
+                elif (event.key == K_RCTRL) or (event.key == K_LCTRL):
                     self.player.fire = False

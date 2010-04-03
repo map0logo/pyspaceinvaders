@@ -7,17 +7,17 @@
 #===============================================================================
 
 import sys
-from pyspaceinvaders_exception import *
-from pyspaceinvaders_conf import *
-from pyspaceinvaders_window import *
-from pyspaceinvaders_game import *
+import pygame
+from pyspaceinvaders_conf import Conf
+from pyspaceinvaders_window import Window
+from pyspaceinvaders_game import Game
 
 #===============================================================================
 # Run.
 #===============================================================================
 
 pygame.init()
-window = Window( Conf.WINDOW_WIDTH, Conf.WINDOW_HEIGHT, Conf.WINDOW_TITLE )
-game = Game( window )
+window = Window(Conf.WINDOW_WIDTH, Conf.WINDOW_HEIGHT, Conf.WINDOW_TITLE)
+game = Game(window)
 game.Run()
-sys.exit( 0 )
+sys.exit(0)
