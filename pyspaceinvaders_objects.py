@@ -48,7 +48,7 @@ class Player(Object):
         self.game        = game
         self.image       = pygame.image.load( "img/player.png" ).convert()
         self.image2      = pygame.image.load( "img/playerb.png" ).convert()
-        self.imageHit    = pygame.image.load( "img/explosion.png" ).convert()
+        self.imageHit    = pygame.image.load( "img/explosionb.png" ).convert()
         self.rect        = self.image.get_rect()
         self.imageFlip   = False
         self.step        = 3 * self.game.stride
@@ -97,6 +97,7 @@ class Alien(Object):
 
     # Class vars:
     imageFlip = False
+    horzDir   = -1
 
 
     def __init__( self, game, fname, fname2 ):
@@ -104,7 +105,7 @@ class Alien(Object):
         Object.__init__( self, game )
         self.image    = pygame.image.load( fname  ).convert()
         self.image2   = pygame.image.load( fname2 ).convert()
-        self.imageHit = pygame.image.load( "img/explosion.png" ).convert()
+        self.imageHit = pygame.image.load( "img/explosionb.png" ).convert()
         self.rect     = self.image.get_rect()
     
     def Hit( self ):
@@ -162,21 +163,27 @@ class Mothership(Object):
 
     # Class vars:
     imageFlip = False
-    horzDir   = -1
 
     def __init__( self, game):
         """ Pass filenames of 2 images that animation will alternate. """
         Object.__init__( self, game )
-        self.image    = pygame.image.load( "img/mothership.png"  ).convert()
-        self.image2   = pygame.image.load( "img/mothershipb.png" ).convert()
-        self.imageHit = pygame.image.load( "img/explosion.png" ).convert()
+        self.image    = pygame.image.load( "img/mother1.png"  ).convert()
+        self.image2   = pygame.image.load( "img/mother1b.png" ).convert()
+        self.imageHit = pygame.image.load( "img/explosionb.png" ).convert()
         self.rect     = self.image.get_rect()
-        self.tick = self.game.tick + random.randint( 20, 25)
-        self.movement[0] = random.choice([-1,1])
+        self.SetAppearing()
+
         
     def SetAppearing( self ):
-        self.tick = self.tick + random.randint( 20, 25)
-        self.movement[0] = random.choice([-1,1])
+        self.tick = self.game.tick + random.randint( 40, 45)
+        self.movement = (random.choice([-1,1]), 0)
+        print self.tick, self.movement
+        self.hit = 0  # counts down
+        if self.movement[0] > 0:
+            self.rect.centerx = 0
+        else:
+            self.rect.centerx = self.game.window.width
+        self.rect.top  = self.game.ceiling
     
     def Hit( self ):
         self.hit = 7

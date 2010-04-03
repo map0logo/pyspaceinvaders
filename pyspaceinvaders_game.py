@@ -49,6 +49,7 @@ class Game:
         self.playerMissiles = [ ]
         self.alienMissiles  = [ ]
         self.mothership     = Mothership( self )
+        self.mothership.valid = False
 
         # Initialize text-lines.
         self.gameTextPage = GameTextPage( self )
@@ -234,9 +235,10 @@ class Game:
                         missile.valid = False
                         continue
             # Has player's missile hit mothership
-            if Collided( missile, mothership ) and (mothership.valid) and (mothership.hit <= 0):
-                mothership.Hit()
-                self.score += Mothership.POINTS
+            if Collided( missile, self.mothership ) and (self.mothership.valid) and (self.mothership.hit <= 0):
+                self.mothership.Hit()
+                self.mothership.valid = False
+                self.score += self.mothership.POINTS
                 if self.cheat != 2:
                     missile.valid = False
             # Has this missile hit any opposite missile?
@@ -347,20 +349,23 @@ class Game:
         if self.tick >= self.mothership.tick:
             self.mothership.valid = True
 
-        # Don't let player move while exploding.
-        if self.mothership.hit <= 0 and self.mothership.valid:
-            # Continue player movement until key released.
-            if self.mothership.movement != (0,0):
-                if  (self.mothership.rect.left  + self.mothership.movement[0] > 0) \
-                and (self.mothership.rect.right + self.mothership.movement[0] < self.window.width):
-                    self.player.rect.move_ip( self.mothership.movement[0], 0 )
-                    self.mothership.imageFlip = not self.mothership.imageFlip
-        
-        if (mothership.rect.left - padding < 0) \
-            or (mothership.rect.right + padding > self.window.width):
+                    
+        padding = 4 # Ojo, hacer global
+        # Don't let mothership move while exploding.
+
+        if ((self.mothership.rect.left - padding < 0) \
+            and (self.mothership.movement[0] < 0)) \
+            or ((self.mothership.rect.right + padding > self.window.width) and (self.mothership.movement[0] > 0)):
             self.mothership.valid = False
             # Initialize mothership appearing
             self.mothership.SetAppearing()
+        elif self.mothership.hit <= 0 and self.mothership.valid:
+            if self.mothership.movement[0] > 0:
+                self.mothership.rect.move_ip( 2, 0 )
+            else:
+                self.mothership.rect.move_ip( -2, 0 )
+            self.mothership.imageFlip = not self.mothership.imageFlip
+            
                 
 
 
