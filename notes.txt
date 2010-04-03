@@ -1,0 +1,37 @@
+Jim Brooks
+http://www.jimbrooks.org/python
+2004/08, 2009/08
+Notes about Python implementation of Space Invaders.
+
+- The game is over if you let the space invaders successfully land,
+  regardless of remaining lives.
+
+- Developed using Python, PyGame, SDL.
+
+- Demonstrating how easy programming in Python and PyGame is,
+  this program was up-and-running in only 2 days!
+
+- Animation is driven by a timer and based on a list of objects
+  (player, aliens, missiles).
+
+- Aliens are divided into "columns".
+  Only the alien at the bottom of column can fire.
+
+- Alien and missile objects will temporarily become invalid
+  (.valid = False) and will be perodically pruned.
+  The player object stays valid.
+  Invalid objects should be excluded from rendering and
+  collision detection.
+
+- An sprite object's .hit is decremented every tick.
+  When an object is struck, .hit is assigned a value > 0.
+  The object becomes dead at the moment .hit transitions from 0 to 1.
+
+- The first for event line works OK on Mandrake 8.1,
+  but timer events simply stop after about 2 seconds on Redhat 8.
+    #for event in pygame.event.get():
+    for event in [ pygame.event.wait() ]:
+
+- Apple Mac:
+  This warning happens but program will run anyway:
+  python[643] *** _NSAutoreleaseNoPool(): Object 0x1146400 of class NSCFString autoreleased with no pool in place - just leaking
