@@ -5,14 +5,10 @@
 # License:  GNU General Public License Version 2 (GPL2).
 #===============================================================================
 
-from pyspaceinvaders_exception import *
+"""Configuration options"""
 
-#-------------------------------------------------------------------------------
-# Configuration.
-#-------------------------------------------------------------------------------
-
-class Conf(object):
-
+class Conf():
+    """Space Invaders speficic and pygame configurations"""
     # pyspaceinvaders-specific:
     CEILING        = 32
     GROUND_PADDING = 6
@@ -32,8 +28,7 @@ class Conf(object):
 #-------------------------------------------------------------------------------
 
 class Color(object):
-    """ Color definitions. """
-
+    """Color definitions"""
     BG        = (0x00, 0x00, 0x00, 0xff)
     TEXT      = (0xd2, 0xf0, 0xff, 0xff)
     ALIVE     = (0x00, 0xff, 0x00, 0xff)
